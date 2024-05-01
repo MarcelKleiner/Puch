@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34316.72
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IgnitionConfiguration", "IgnitionConfiguration\IgnitionConfiguration.csproj", "{F07BB2E6-15BA-488F-B214-F01F32365897}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F07BB2E6-15BA-488F-B214-F01F32365897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F07BB2E6-15BA-488F-B214-F01F32365897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F07BB2E6-15BA-488F-B214-F01F32365897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F07BB2E6-15BA-488F-B214-F01F32365897}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6CEAA76D-9240-4F34-8D5F-B8188CDA12D5}
+	EndGlobalSection
+EndGlobal
