@@ -1,8 +1,0 @@
-../Core/Src/main.cpp:75:5:int main()	3
-../Core/Src/main.cpp:143:6:void SystemClock_Config()	3
-../Core/Src/main.cpp:187:6:void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef*)	2
-../Core/Src/main.cpp:193:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	3
-../Core/Src/main.cpp:208:6:void USB_CDC_RX_Interrupt(uint8_t*, uint32_t)	1
-../Core/Src/main.cpp:219:6:void Error_Handler()	1
-../Core/Src/main.cpp:228:1:void __static_initialization_and_destruction_0(int, int)	3
-../Core/Src/main.cpp:228:1:cpp)	1

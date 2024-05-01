@@ -1,0 +1,3 @@
+../Core/Src/USB/USBCom.cpp:10:1:USB_Com::USB_Com(Flash*)	1
+../Core/Src/USB/USBCom.cpp:16:6:bool USB_Com::Transmit(uint8_t*, uint8_t)	2
+../Core/Src/USB/USBCom.cpp:22:6:void USB_Com::Receive(uint8_t*, uint8_t)	9
