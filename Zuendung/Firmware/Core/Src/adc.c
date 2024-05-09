@@ -104,10 +104,17 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     /* ADC2 clock enable */
     __HAL_RCC_ADC12_CLK_ENABLE();
 
+    __HAL_RCC_GPIOF_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
     /**ADC2 GPIO Configuration
+    PF1-OSC_OUT     ------> ADC2_IN10
     PA5     ------> ADC2_IN13
     */
+    GPIO_InitStruct.Pin = GPIO_PIN_1;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
     GPIO_InitStruct.Pin = Tacho_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -134,8 +141,11 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
     __HAL_RCC_ADC12_CLK_DISABLE();
 
     /**ADC2 GPIO Configuration
+    PF1-OSC_OUT     ------> ADC2_IN10
     PA5     ------> ADC2_IN13
     */
+    HAL_GPIO_DeInit(GPIOF, GPIO_PIN_1);
+
     HAL_GPIO_DeInit(Tacho_GPIO_Port, Tacho_Pin);
 
     /* ADC2 interrupt Deinit */
