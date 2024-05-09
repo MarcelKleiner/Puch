@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IgnitionConfiguration")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e2991fc6c65a1819cf5fccd7e58bc9be823f781b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c603e591082845e32137c510654f33a7fd95dec")]
 [assembly: System.Reflection.AssemblyProductAttribute("IgnitionConfiguration")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IgnitionConfiguration")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

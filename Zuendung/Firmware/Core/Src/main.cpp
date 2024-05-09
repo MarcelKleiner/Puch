@@ -44,7 +44,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+constexpr int AdcArraySize = 12000;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -55,6 +55,14 @@
 
 volatile uint32_t _adcValue = 0;
 bool hasChanged = false;
+bool isOn = false;
+
+    short _adcArray[AdcArraySize];
+    int _adcSum = 1300 * AdcArraySize;
+    short _lastValueIndex = 0;
+    short _nextValueIndex = 1023;
+    int _adcMeanValue = 1300;
+    bool 	usbTransmitEnable  = false;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -75,7 +83,10 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+    for (int i = 0; i < AdcArraySize; i++)
+    {
+        _adcArray[i] = 1300;
+    }
 
   /* USER CODE END 1 */
 
@@ -96,40 +107,54 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_USB_Device_Init();
-  MX_ADC2_Init();
-  MX_DAC1_Init();
-  MX_TIM1_Init();
-  MX_TIM2_Init();
+	  MX_GPIO_Init();
+	  MX_USB_Device_Init();
+	  MX_ADC2_Init();
+	  MX_DAC1_Init();
+	  MX_TIM1_Init();
+	  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-	HAL_TIM_Base_Start_IT(&htim2);
-	HAL_TIM_Base_Start_IT(&htim1);
-	HAL_ADC_Start_IT(&hadc2);
-	HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
-	flash.ReadFlash();
+		HAL_TIM_Base_Start_IT(&htim2);
+		HAL_TIM_Base_Start_IT(&htim1);
+		HAL_ADC_Start_IT(&hadc2);
+		HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
+		flash.ReadFlash();
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	int counter = 0;
   while (1)
   {
 
-	  if(_adcValue > flash.GetFetOnValue())
+	  if((int32_t)(_adcMeanValue - _adcValue) < (int32_t)-flash.GetFetOnValue())
 	  {
 			HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, flash.GetDacOutput());
 			HAL_GPIO_WritePin(IgnitionOff_GPIO_Port, IgnitionOff_Pin, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(Relay_GPIO_Port, Relay_Pin, GPIO_PIN_RESET);
 			hasChanged = true;
+			isOn = true;
 	  }
 
-	  if(_adcValue < flash.GetFetOffValue())
+	  if((int32_t)(_adcMeanValue -_adcValue) > (int32_t)flash.GetFetOffValue())
 	  {
 			HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 0);
 			HAL_GPIO_WritePin(IgnitionOff_GPIO_Port, IgnitionOff_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(Relay_GPIO_Port, Relay_Pin, GPIO_PIN_SET);
 			hasChanged = true;
+			isOn = false;
+			HAL_Delay(10);
 	  }
+
+//      if(counter >5000){
+//      	counter = 0;
+//      	uint8_t txData[] = {(uint8_t)(_adcMeanValue>>8), (uint8_t)_adcMeanValue};
+//      	Usb.Transmit(txData, 2);
+//      }
+//      counter++;
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -187,7 +212,25 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc){
 	if(hadc->Instance == ADC2){
-		_adcValue = hadc->Instance->DR;
+		_adcValue = HAL_ADC_GetValue(hadc);
+
+        _adcSum -= _adcArray[_lastValueIndex];
+        _adcArray[_nextValueIndex] = _adcValue;
+        _adcSum += _adcArray[_nextValueIndex];
+
+        _lastValueIndex++;
+        _nextValueIndex++;
+
+        if (_lastValueIndex >= AdcArraySize)
+        {
+            _lastValueIndex = 0;
+        }
+
+        if (_nextValueIndex >= AdcArraySize)
+        {
+            _nextValueIndex = 0;
+        }
+        _adcMeanValue = (_adcSum / AdcArraySize);
 	}
 }
 
@@ -209,6 +252,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 void USB_CDC_RX_Interrupt(uint8_t *data, uint32_t length)
 {
 	Usb.Receive(data, length);
+	usbTransmitEnable = true;
 }
 
 /* USER CODE END 4 */
